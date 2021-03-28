@@ -5,8 +5,11 @@ const ctx = canvas.getContext('2d')
 const imgBird = new Image()
 imgBird.src = './assets/img/128.png'
 // 画面設定
-const canvasH = 500
-const canvasW = 800
+const canvasH = 512
+const canvasW = 768
+
+canvas.height = canvasH
+canvas.width = canvasW
 
 // キャラクター格納配列
 const gameObjs = []
@@ -60,46 +63,60 @@ class Bird extends GameObject {
     // スピード
     // TODO コンストラクタに入れる？
     let speed = 10
-    if (!keyEvent) {
-      if (this.frameCount % 20 === 0 && this.column === 0) {
+    // キーを押してない状態
+    if (!keyEvent && !this.jump) {
+      if (this.frameCount % 20 === 0 && this.column === 0 && this.y === canvasH - this.height) {
         this.column = 1
-      } else if (this.frameCount % 20 === 0 && this.column === 1) {
+      } else if (this.frameCount % 20 === 0 && this.column === 1 && this.y === canvasH - this.height) {
         this.column = 0
+      }
+    // キーダウンイベント発生
+    } else if (!keyEvent && this.jump){
+      if(this.y < canvasH - this.height) {
+        if (this.frameCount % 10 === 0 && this.column === 3) {
+          this.column = 2
+        } else if (this.frameCount % 10 === 0 && this.column === 2) {
+          this.column = 3
+        }
       }
     } else {
       if (keyEvent === 'ArrowRight' && this.x < canvasW - 128) {
         this.x += speed
       } else if (keyEvent === 'ArrowLeft' && this.x > 0) {
-        this.flipDraw(this.image)
         this.x -= speed
-      } else if (keyEvent === 'ArrowUp' && this.y < canvasH) {
-        this.column = 2
-        if (this.frameCount % 20 === 0 && this.column === 3) {
+      // 飛ぶ動作
+      } else if (keyEvent === 'ArrowUp' && this.y > 0) {
+        // カラム0から2へ切り替える
+        if(this.column === 0 || this.column === 1) this.column = 2 
+        // ジャンプモードに切り替え
+        this.jump = true
+
+        if (this.frameCount % 10 === 0 && this.column === 3) {
           this.column = 2
-        } else if (this.frameCount % 20 === 0 && this.column === 2) {
+        } else if (this.frameCount % 10 === 0 && this.column === 2) {
           this.column = 3
         }
-        this.y -= speed
+        this.y -= 32
+      } else if (keyEvent === 'ArrowDown' && this.jump){
+        if(this.y < canvasH - this.height) {
+          if (this.frameCount % 1 === 0 && this.column === 3) {
+            this.column = 2
+          } else if (this.frameCount % 1 === 0 && this.column === 2) {
+            this.column = 3
+          }
+          this.y += 32
+        }else{
+          this.jump = false
+          this.column = 0
+          this.row = 0
+        }
       }
     }
-    // if(this.jump) {
-    //   if(this.frameCount % 12 === 0 && this.column === 3){
-    //     this.column = 2
-    //   }else if(this.frameCount % 12 === 0 && this.column === 2){
-    //     this.column = 3
-    //   }
-    // }else{
-    //   if(this.frameCount % 20 === 0 && this.column === 0){
-    //     this.column = 1
-    //   }else if(this.frameCount % 20 === 0 && this.column === 1){
-    //     this.column = 0
-    //   }
-    // }
     this.draw(this.image)
   }
 }
 
-let bird = new Bird(imgBird, 0, 500 - 128, 128, 128)
+let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
 imgBird.onload = () => {
   ctx.drawImage(imgBird, 0, 0, 128, 128, 0, 0, 128, 128)
 }
