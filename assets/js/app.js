@@ -59,60 +59,93 @@ class Bird extends GameObject {
     this.speed = 10
     this.vy = 0
     this.jumpPower = -21
+    this.walkFrame = [
+      [0, 0],
+      [0, 1],
+    ]
+    this.jumpFrame = [
+      [0,2],
+      [0,3]
+    ]
+    this.deadFrame = [
+      [1,2],
+      [1,3]
+    ]
+    this.currentFrame = this.walkFrame
+    this.frameNum = 0
   }
-  update(keyEvent) {
+  update() {
     // 毎フレームカウントする
     this.frameCount++
     // スピード
     // キーを押してない状態&ジャンプしてない
-    if (!keyEvent && !this.jump) {
-      if (
-        this.frameCount % 20 === 0 &&
-        this.column === 0 &&
-        this.y === canvasH - this.height
-      ) {
-        this.column = 1
-      } else if (
-        this.frameCount % 20 === 0 &&
-        this.column === 1 &&
-        this.y === canvasH - this.height
-      ) {
-        this.column = 0
-      }
-      // キーを押してない状態＆ジャンプ状態
-    } else if (!keyEvent && this.jump) {
-      this.y += this.vy
-      this.vy += 1.2
+    // if (!keyEvent && !this.jump) {
+    //   if (
+    //     this.frameCount % 20 === 0 &&
+    //     this.column === 0 &&
+    //     this.y === canvasH - this.height
+    //   ) {
+    //     this.column = 1
+    //   } else if (
+    //     this.frameCount % 20 === 0 &&
+    //     this.column === 1 &&
+    //     this.y === canvasH - this.height
+    //   ) {
+    //     this.column = 0
+    //   }
+    //   // キーを押してない状態＆ジャンプ状態
+    // } else if (!keyEvent && this.jump) {
+    //   this.y += this.vy
+    //   this.vy += 1.2
 
-      if (this.y < canvasH - this.height) {
-        this.changeFrame(10)
-        // 何もしなかったら降りてくる
-        this.y += 2
-      } else {
-        this.jump = false
-        this.column = 0
-        this.row = 0
-      }
-      // キーダウンイベント発生
-    } else {
-      if (keyEvent === 'ArrowRight' && this.x < canvasW - this.width) {
-        this.x += this.speed
-      } else if (keyEvent === 'ArrowLeft' && this.x > 0) {
-        this.x -= this.speed
-        // 飛ぶ動作
-      } else if (keyEvent === 'ArrowUp' && this.y > 0) {
-        // カラム0から2へ切り替える
-        if (this.column === 0 || this.column === 1) this.column = 2
-        // ジャンプモードに切り替え
-        this.jump = true
+    //   if (this.y < canvasH - this.height) {
+    //     this.changeFrame(10)
+    //     // 何もしなかったら降りてくる
+    //     this.y += 2
+    //   } else {
+    //     this.jump = false
+    //     this.column = 0
+    //     this.row = 0
+    //   }
+    //   // キーダウンイベント発生
+    // } else {
+    //   if (keyEvent === 'ArrowRight' && this.x < canvasW - this.width) {
+    //     this.x += this.speed
+    //   } else if (keyEvent === 'ArrowLeft' && this.x > 0) {
+    //     this.x -= this.speed
+    //     // 飛ぶ動作
+    //   } else if (keyEvent === 'ArrowUp' && this.y > 0) {
+    //     // カラム0から2へ切り替える
+    //     if (this.column === 0 || this.column === 1) this.column = 2
+    //     // ジャンプモードに切り替え
+    //     this.jump = true
 
-        this.vy = this.jumpPower
+    //     this.vy = this.jumpPower
 
-        this.changeFrame(10)
-        this.y -= 32
-      }
+    //     this.changeFrame(10)
+    //     this.y -= 32
+    //   }
+    // }
+    if (this.frameCount % 20 === 0) {
+      this.frameNum ++
+      this.column = this.currentFrame[this.frameNum % 2][1]
+      this.row = this.currentFrame[this.frameNum % 2][0]
     }
     this.draw(this.image)
+  }
+  jump() {
+    if (this.jump) {
+    }
+  }
+  moveRight() {
+    if (this.x < canvasW - this.width) {
+      this.x += this.speed
+    }
+  }
+  moveLeft() {
+    if (this.x > 0) {
+      this.x -= this.speed
+    }
   }
   changeFrame(frameCount) {
     if (this.frameCount % frameCount === 0 && this.column === 3) {
@@ -134,8 +167,20 @@ function mainLoop() {
   gameObjs.forEach((gameObj) => {
     gameObj.update()
   })
-  window.onkeydown = (event) => {
-    bird.update(event.code)
-  }
+  // window.onkeydown = (event) => {
+  //   bird.update(event.code)
+  // }
 }
 requestAnimationFrame(mainLoop)
+
+window.onkeydown = (event) => {
+  var selectedObj = bird
+
+  if (event.code === 'ArrowUp') {
+    selectedObj.jump()
+  } else if (event.code === 'ArrowRight') {
+    selectedObj.moveRight()
+  } else if (event.code === 'ArrowLeft') {
+    selectedObj.moveLeft()
+  }
+}
