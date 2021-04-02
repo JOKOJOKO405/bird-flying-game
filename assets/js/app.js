@@ -78,6 +78,7 @@ class Bird extends GameObject {
         } else if (this.frameCount % 10 === 0 && this.column === 2) {
           this.column = 3
         }
+        this.y += 1;
       }
     } else {
       if (keyEvent === 'ArrowRight' && this.x < canvasW - 128) {
