@@ -56,64 +56,70 @@ class Bird extends GameObject {
     this.image = image
     this.frameCount = 0
     this.jump = false
+    this.speed = 10
+    this.vy = 0
+    this.jumpPower = -21
   }
   update(keyEvent) {
     // 毎フレームカウントする
     this.frameCount++
     // スピード
-    // TODO コンストラクタに入れる？
-    let speed = 10
-    // キーを押してない状態
+    // キーを押してない状態&ジャンプしてない
     if (!keyEvent && !this.jump) {
-      if (this.frameCount % 20 === 0 && this.column === 0 && this.y === canvasH - this.height) {
+      if (
+        this.frameCount % 20 === 0 &&
+        this.column === 0 &&
+        this.y === canvasH - this.height
+      ) {
         this.column = 1
-      } else if (this.frameCount % 20 === 0 && this.column === 1 && this.y === canvasH - this.height) {
+      } else if (
+        this.frameCount % 20 === 0 &&
+        this.column === 1 &&
+        this.y === canvasH - this.height
+      ) {
         this.column = 0
       }
-    // キーダウンイベント発生
-    } else if (!keyEvent && this.jump){
-      if(this.y < canvasH - this.height) {
-        if (this.frameCount % 10 === 0 && this.column === 3) {
-          this.column = 2
-        } else if (this.frameCount % 10 === 0 && this.column === 2) {
-          this.column = 3
-        }
-        this.y += 1;
+      // キーを押してない状態＆ジャンプ状態
+    } else if (!keyEvent && this.jump) {
+      this.y += this.vy
+      this.vy += 1.2
+
+      if (this.y < canvasH - this.height) {
+        this.changeFrame(10)
+        // 何もしなかったら降りてくる
+        this.y += 2
+      } else {
+        this.jump = false
+        this.column = 0
+        this.row = 0
       }
+      // キーダウンイベント発生
     } else {
-      if (keyEvent === 'ArrowRight' && this.x < canvasW - 128) {
-        this.x += speed
+      if (keyEvent === 'ArrowRight' && this.x < canvasW - this.width) {
+        this.x += this.speed
       } else if (keyEvent === 'ArrowLeft' && this.x > 0) {
-        this.x -= speed
-      // 飛ぶ動作
+        this.x -= this.speed
+        // 飛ぶ動作
       } else if (keyEvent === 'ArrowUp' && this.y > 0) {
         // カラム0から2へ切り替える
-        if(this.column === 0 || this.column === 1) this.column = 2 
+        if (this.column === 0 || this.column === 1) this.column = 2
         // ジャンプモードに切り替え
         this.jump = true
 
-        if (this.frameCount % 10 === 0 && this.column === 3) {
-          this.column = 2
-        } else if (this.frameCount % 10 === 0 && this.column === 2) {
-          this.column = 3
-        }
+        this.vy = this.jumpPower
+
+        this.changeFrame(10)
         this.y -= 32
-      } else if (keyEvent === 'ArrowDown' && this.jump){
-        if(this.y < canvasH - this.height) {
-          if (this.frameCount % 1 === 0 && this.column === 3) {
-            this.column = 2
-          } else if (this.frameCount % 1 === 0 && this.column === 2) {
-            this.column = 3
-          }
-          this.y += 32
-        }else{
-          this.jump = false
-          this.column = 0
-          this.row = 0
-        }
       }
     }
     this.draw(this.image)
+  }
+  changeFrame(frameCount) {
+    if (this.frameCount % frameCount === 0 && this.column === 3) {
+      this.column = 2
+    } else if (this.frameCount % frameCount === 0 && this.column === 2) {
+      this.column = 3
+    }
   }
 }
 
