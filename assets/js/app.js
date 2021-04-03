@@ -60,6 +60,9 @@ class Bird extends GameObject {
     this.vy = 0
     this.jumpPower = -21
     this.walkFrame = [
+      // col,rowの順
+      /* [col, row]
+       [cpl, row] */
       [1, 0],
       [0, 0],
     ]
@@ -86,7 +89,7 @@ class Bird extends GameObject {
       this.changeFrame()
     }else if(this.jumpMode && this.y <= this.baseLine){
       this.y += this.vy
-      this.vy += 1.4
+      this.vy += 1.2
       this.changeFrame()
       if(this.y <= 0){
         this.vy = 6
