@@ -38,11 +38,13 @@ class GameObject {
     this.row = 0
     gameObjs.push(this)
   }
+  // 対象との衝突差
   computedDistance(obj, x, y) {
     const distanceX = Math.abs(obj.centerX - this.centerX)
     const distanceY = Math.abs(obj.centerY - this.centerY)
     return distanceX <= x && distanceY <= y
   }
+  // オブジェクトの真ん中算出
   calculateCenterPos() {
     this.centerX = this.x + this.width / 2
     this.centerY = this.y + this.height / 2
@@ -88,12 +90,14 @@ class Bird extends GameObject {
   update() {
     // 毎フレームカウントする
     this.frameCount++
+    // カラスに当たったら
     if(this.isHit){
       this.currentFrame = this.deadFrame
       this.changeFrame()
       this.y += 4
       if (this.y < 0) delete this
     }
+    // ジャンプしてない＆地面についてる
     else if (!this.jumpMode && this.y >= this.baseLine) {
       this.changeFrame()
     }else if(this.jumpMode && this.y <= this.baseLine){
@@ -104,6 +108,7 @@ class Bird extends GameObject {
         this.vy = 6
         this.y++
       }
+    // ジャンプしてる＆地上から離れてる
     }else if(this.jumpMode && this.y >= this.baseLine){
       this.jumpMode = false
       this.y = this.baseLine
@@ -171,6 +176,7 @@ class Gun extends GameObject{
       this.shotCrow()
     }
   }
+  // TODO カラス側に持たせる？
   shotCrow(){
     crowsObj.forEach((crow)=>{
       if(this.computedDistance(crow, 20, 40)){
