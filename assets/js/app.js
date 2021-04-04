@@ -93,6 +93,7 @@ class Bird extends GameObject {
       this.currentFrame = this.deadFrame
       this.changeFrame()
       this.y += 4
+      if (this.y < 0) delete this
     }
     else if (!this.jumpMode && this.y >= this.baseLine) {
       this.changeFrame()
@@ -218,6 +219,7 @@ requestAnimationFrame(mainLoop)
 
 window.onkeydown = (event) => {
   var selectedObj = bird
+  if(bird.isHit) return
 
   if (event.code === 'ArrowUp') {
     selectedObj.jump()
