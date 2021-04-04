@@ -168,7 +168,16 @@ class Gun extends GameObject{
       this.x += this.speed
       super.draw(this.image)
       super.calculateCenterPos()
+      this.shotCrow()
     }
+  }
+  shotCrow(){
+    crowsObj.forEach((crow)=>{
+      if(this.computedDistance(crow)){
+        delete this
+        crow.reuseObj(makeRandomNum(6, 2))
+      }
+    })
   }
 }
 
