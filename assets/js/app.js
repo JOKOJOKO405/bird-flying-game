@@ -4,8 +4,10 @@ const ctx = canvas.getContext('2d')
 // 画像設定
 const imgBird = new Image()
 const imgCrow = new Image()
+const imgGun = new Image()
 imgBird.src = './assets/img/128.png'
 imgCrow.src = './assets/img/enemy_s.png'
+imgGun.src = './assets/img/don.png'
 // 画面設定
 const canvasH = 512
 const canvasW = 768
@@ -24,7 +26,8 @@ const makeRandomNum = (max, min) => {
 }
 
 class GameObject {
-  constructor(x, y, width, height) {
+  constructor(image, x, y, width, height) {
+    this.image = image
     this.x = x
     this.y = y
     this.centerX = this.x + this.width / 2
@@ -51,10 +54,10 @@ class GameObject {
 
 class Bird extends GameObject {
   constructor(image, x, y, width, height) {
-    super(x, y, width, height)
-    this.image = image
+    super(image, x, y, width, height)
     this.frameCount = 0
     this.jumpMode = false
+    this.isShooting = false
     this.speed = 10
     this.vy = 0
     this.jumpPower = -21
@@ -124,6 +127,10 @@ class Bird extends GameObject {
       this.currentFrame = this.squatFrame
     }
   }
+  shot(){
+    this.isShooting = true
+    let gun = new Gun(imgGun, this.x, this.y, 64, 64)
+  }
   changeFrame(){
     if(this.frameCount % 20 === 0){
       this.frameNum ++
@@ -133,10 +140,22 @@ class Bird extends GameObject {
   }
 }
 
+class Gun extends GameObject{
+  constructor(image, x, y, width, height){
+    super(image, x, y, width, height)
+    this.speed = 10
+  }
+  update(){
+    if(bird.isShooting){
+      this.x += this.speed
+      this.draw(this.image)
+    }
+  }
+}
+
 class Crow extends GameObject {
   constructor(image, x, y, width, height) {
-    super(x, y, width, height)
-    this.image = image
+    super(image, x, y, width, height)
     this.speed = makeRandomNum(6, 2)
   }
   update(){
@@ -189,5 +208,7 @@ window.onkeydown = (event) => {
     selectedObj.moveLeft()
   } else if (event.code === 'ArrowDown') {
     selectedObj.moveDown()
+  } else if(event.code === 'Space'){
+    selectedObj.shot()
   }
 }
