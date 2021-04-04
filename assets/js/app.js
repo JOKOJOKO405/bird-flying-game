@@ -129,7 +129,7 @@ class Bird extends GameObject {
   }
   shot(){
     this.isShooting = true
-    let gun = new Gun(imgGun, this.x, this.y, 64, 64)
+    new Gun(imgGun, this.x, this.y, 64, 64)
   }
   changeFrame(){
     if(this.frameCount % 20 === 0){
