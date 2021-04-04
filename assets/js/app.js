@@ -18,7 +18,6 @@ canvas.width = canvasW
 // キャラクター格納配列
 const gameObjs = []
 const crowsObj = []
-let gun = null
 
 // 乱数
 const makeRandomNum = (max, min) => {
@@ -39,10 +38,10 @@ class GameObject {
     this.row = 0
     gameObjs.push(this)
   }
-  computedDistance(obj) {
+  computedDistance(obj, x, y) {
     const distanceX = Math.abs(obj.centerX - this.centerX)
     const distanceY = Math.abs(obj.centerY - this.centerY)
-    return distanceX <= 20 && distanceY <= 60
+    return distanceX <= x && distanceY <= y
   }
   calculateCenterPos() {
     this.centerX = this.x + this.width / 2
@@ -139,11 +138,12 @@ class Bird extends GameObject {
   }
   shot(){
     this.isShooting = true
-    gun = new Gun(imgGun, this.x, this.y, 64, 64)
+    gun.x = this.x
+    gun.y = this.y
   }
   hitCrow(){
     crowsObj.forEach((crow)=>{
-      if(this.computedDistance(crow)){
+      if(this.computedDistance(crow, 20, 60)){
         this.isHit = true
         this.currentFrame = this.deadFrame
       }
@@ -173,8 +173,11 @@ class Gun extends GameObject{
   }
   shotCrow(){
     crowsObj.forEach((crow)=>{
-      if(this.computedDistance(crow)){
+      if(this.computedDistance(crow, 20, 40)){
+        bird.isShooting = false
         delete this
+        this.x = null
+        this.y = null
         crow.reuseObj(makeRandomNum(6, 2))
       }
     })
@@ -201,14 +204,13 @@ class Crow extends GameObject {
 }
 
 let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
-// imgBird.onload = () => {
-//   ctx.drawImage(imgBird, 0, 0, 128, 128, 0, 0, 128, 128)
-// }
+let gun = new Gun(imgGun, null, null, 64, 64)
+
 const makeCrows = () => {
   let crows = []
   for (let i = 0; i < makeRandomNum(8,6); i++) {
     const x = makeRandomNum(canvasW + 200, canvasW)
-    const y = makeRandomNum(canvasH - 64, 0)
+    const y = makeRandomNum(canvasH - 96, 0)
     crows[i] = new Crow(imgCrow, x, y, 64, 64)
     crowsObj.push(crows[i])
   }
