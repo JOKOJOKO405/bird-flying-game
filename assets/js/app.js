@@ -3,7 +3,9 @@ const ctx = canvas.getContext('2d')
 
 // 画像設定
 const imgBird = new Image()
+const imgCrow = new Image()
 imgBird.src = './assets/img/128.png'
+imgCrow.src = './assets/img/enemy_s.png'
 // 画面設定
 const canvasH = 512
 const canvasW = 768
@@ -13,6 +15,13 @@ canvas.width = canvasW
 
 // キャラクター格納配列
 const gameObjs = []
+const crowsObj = []
+
+// 乱数
+const makeRandomNum = (max, min) => {
+  const num = Math.floor(Math.random() * (max - min + 1) + min)
+  return num
+}
 
 class GameObject {
   constructor(x, y, width, height) {
@@ -36,17 +45,7 @@ class GameObject {
     this.centerY = this.y + this.height / 2
   }
   draw(image) {
-    ctx.drawImage(
-      image,
-      this.column * this.width,
-      this.row * this.height,
-      this.width,
-      this.height,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    )
+    ctx.drawImage(image, this.column * this.width, this.row * this.height, this.width, this.height, this.x, this.y, this.width, this.height)
   }
 }
 
@@ -134,10 +133,40 @@ class Bird extends GameObject {
   }
 }
 
-let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
-imgBird.onload = () => {
-  ctx.drawImage(imgBird, 0, 0, 128, 128, 0, 0, 128, 128)
+class Crow extends GameObject {
+  constructor(image, x, y, width, height) {
+    super(x, y, width, height)
+    this.image = image
+    this.speed = makeRandomNum(6, 2)
+  }
+  update(){
+    this.x -= this.speed
+    this.draw(this.image)
+    if(this.x < 0){
+      this.reuseObj(makeRandomNum(6, 2))
+    }
+  }
+  reuseObj(speed){
+    this.x = canvasW + 100
+    this.speed = speed
+  }
 }
+
+let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
+// imgBird.onload = () => {
+//   ctx.drawImage(imgBird, 0, 0, 128, 128, 0, 0, 128, 128)
+// }
+const makeCrows = () => {
+  let crows = []
+  for (let i = 0; i < makeRandomNum(8,6); i++) {
+    const x = makeRandomNum(canvasW + 200, canvasW)
+    const y = makeRandomNum(canvasH - 64, 0)
+    crows[i] = new Crow(imgCrow, x, y, 64, 64)
+    gameObjs.push(crows[i])
+  }
+  return crows
+}
+makeCrows()
 
 function mainLoop() {
   let loopId = window.requestAnimationFrame(mainLoop)
@@ -145,11 +174,9 @@ function mainLoop() {
   gameObjs.forEach((gameObj) => {
     gameObj.update()
   })
-  // window.onkeydown = (event) => {
-  //   bird.update(event.code)
-  // }
 }
 requestAnimationFrame(mainLoop)
+
 
 window.onkeydown = (event) => {
   var selectedObj = bird
