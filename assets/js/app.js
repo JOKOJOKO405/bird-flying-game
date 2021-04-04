@@ -205,6 +205,7 @@ class Crow extends GameObject {
   }
   reuseObj(speed){
     this.x = canvasW + 100
+    this.y = makeRandomNum(canvasH - 96, 0)
     this.speed = speed
   }
 }
