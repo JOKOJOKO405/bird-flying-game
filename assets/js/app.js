@@ -16,7 +16,7 @@ canvas.height = canvasH
 canvas.width = canvasW
 
 // キャラクター格納配列
-const gameObjs = []
+let gameObjs = []
 const crowsObj = []
 
 // 乱数
@@ -39,10 +39,12 @@ class GameObject {
     gameObjs.push(this)
   }
   // 対象との衝突差
-  computedDistance(obj, x, y) {
+  computedDistance(obj) {
     const distanceX = Math.abs(obj.centerX - this.centerX)
     const distanceY = Math.abs(obj.centerY - this.centerY)
-    return distanceX <= x && distanceY <= y
+    // 三平方の定理
+    let dist = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2))
+    return dist < ((this.width / 2 + obj.width / 2) / 2)
   }
   // オブジェクトの真ん中算出
   calculateCenterPos() {
@@ -51,6 +53,13 @@ class GameObject {
   }
   draw(image) {
     ctx.drawImage(image, this.column * this.width, this.row * this.height, this.width, this.height, this.x, this.y, this.width, this.height)
+    // 当たり判定のチェック
+    ctx.fillRect(this.centerX, this.centerY, 5, 5)
+    ctx.fillStyle = "red"
+  }
+  delete(){
+    // 自分以外を消す
+    gameObjs = gameObjs.filter(obj => obj !== this);
   }
 }
 
@@ -142,13 +151,15 @@ class Bird extends GameObject {
     }
   }
   shot(){
-    this.isShooting = true
-    gun.x = this.x
-    gun.y = this.y
+    new Gun(imgGun, this.x, this.y, 64, 64)
+    // this.isShooting = true
+    // gun.x = this.x
+    // gun.y = this.y
+    
   }
   hitCrow(){
     crowsObj.forEach((crow)=>{
-      if(this.computedDistance(crow, 20, 60)){
+      if(this.computedDistance(crow)){
         this.isHit = true
         this.currentFrame = this.deadFrame
       }
@@ -166,24 +177,24 @@ class Bird extends GameObject {
 class Gun extends GameObject{
   constructor(image, x, y, width, height){
     super(image, x, y, width, height)
-    this.speed = 10
+    this.speed = 3
   }
   update(){
-    if(bird.isShooting){
       this.x += this.speed
       super.draw(this.image)
       super.calculateCenterPos()
       this.shotCrow()
-    }
+    // if(bird.isShooting){
+      
+    // }
   }
   // TODO カラス側に持たせる？
   shotCrow(){
     crowsObj.forEach((crow)=>{
-      if(this.computedDistance(crow, 20, 40)){
-        bird.isShooting = false
+      if(this.computedDistance(crow)){
+        // bird.isShooting = false
         delete this
-        this.x = null
-        this.y = null
+        this.delete()
         crow.reuseObj(makeRandomNum(6, 2))
       }
     })
@@ -193,7 +204,7 @@ class Gun extends GameObject{
 class Crow extends GameObject {
   constructor(image, x, y, width, height) {
     super(image, x, y, width, height)
-    this.speed = makeRandomNum(6, 2)
+    this.speed = makeRandomNum(2, 1)
   }
   update(){
     this.x -= this.speed
@@ -211,7 +222,7 @@ class Crow extends GameObject {
 }
 
 let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
-let gun = new Gun(imgGun, null, null, 64, 64)
+
 
 const makeCrows = () => {
   let crows = []
