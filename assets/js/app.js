@@ -104,7 +104,10 @@ class Bird extends GameObject {
       this.currentFrame = this.deadFrame
       this.changeFrame()
       this.y += 4
-      if (this.y < 0) delete this
+      if (this.y < 0) {
+        delete this
+        this.delete()
+      }
     }
     // ジャンプしてない＆地面についてる
     else if (!this.jumpMode && this.y >= this.baseLine) {
@@ -177,7 +180,7 @@ class Bird extends GameObject {
 class Gun extends GameObject{
   constructor(image, x, y, width, height){
     super(image, x, y, width, height)
-    this.speed = 3
+    this.speed = 10
   }
   update(){
       this.x += this.speed
@@ -204,10 +207,15 @@ class Gun extends GameObject{
 class Crow extends GameObject {
   constructor(image, x, y, width, height) {
     super(image, x, y, width, height)
-    this.speed = makeRandomNum(2, 1)
+    this.speed = 3
+    this.flySwitch = false
+    this.frameCount = 0
+    // this.speed = makeRandomNum(6, 2)
   }
   update(){
+    this.frameCount++
     this.x -= this.speed
+    this.fly()
     super.draw(this.image)
     super.calculateCenterPos()
     if(this.x < 0){
@@ -218,6 +226,15 @@ class Crow extends GameObject {
     this.x = canvasW + 100
     this.y = makeRandomNum(canvasH - 96, 0)
     this.speed = speed
+  }
+  fly(){
+    if(this.frameCount % 10 === 0 && !this.flySwitch){
+      this.flySwitch = true
+      this.y += 20
+    }else if (this.frameCount % 10 === 0 && this.flySwitch){
+      this.flySwitch = false
+      this.y -= 20
+    }
   }
 }
 
