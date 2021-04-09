@@ -42,9 +42,11 @@ class GameObject {
   computedDistance(obj) {
     const distanceX = Math.abs(obj.centerX - this.centerX)
     const distanceY = Math.abs(obj.centerY - this.centerY)
+    console.log(distanceX, distanceY)
     // 三平方の定理
     let dist = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2))
-    return dist < ((this.width / 2 + obj.width / 2) / 2)
+    return dist < 50
+    // return dist < ((this.width / 2 + obj.width / 2) / 2)
   }
   // オブジェクトの真ん中算出
   calculateCenterPos() {
@@ -198,6 +200,7 @@ class Gun extends GameObject{
         // bird.isShooting = false
         delete this
         this.delete()
+        score.addScore()
         crow.reuseObj(makeRandomNum(6, 2))
       }
     })
@@ -210,6 +213,8 @@ class Crow extends GameObject {
     this.speed = 3
     this.flySwitch = false
     this.frameCount = 0
+    this.originY = this.y
+    this.flySpeed = 1
     // this.speed = makeRandomNum(6, 2)
   }
   update(){
@@ -225,20 +230,43 @@ class Crow extends GameObject {
   reuseObj(speed){
     this.x = canvasW + 100
     this.y = makeRandomNum(canvasH - 96, 0)
+    this.originY = this.y
     this.speed = speed
   }
   fly(){
-    if(this.frameCount % 10 === 0 && !this.flySwitch){
-      this.flySwitch = true
-      this.y += 20
-    }else if (this.frameCount % 10 === 0 && this.flySwitch){
-      this.flySwitch = false
-      this.y -= 20
+    this.y += this.flySpeed
+    if(this.originY + 30 < this.y || this.originY - 30 > this.y){
+      this.flySpeed *= -1
     }
+    // if(this.frameCount % 10 === 0 && !this.flySwitch){
+    //   this.flySwitch = true
+    //   this.y += 20
+    // }else if (this.frameCount % 10 === 0 && this.flySwitch){
+    //   this.flySwitch = false
+    //   this.y -= 20
+    // }
+  }
+}
+
+class Score extends GameObject {
+  constructor(x, y, width, height){
+    super('', x, y, width, height)
+    this.count = 0
+  }
+  addScore(){
+    this.count++
+  }
+  reset(){
+    this.count = 0
+  }
+  update(){
+    ctx.font = '48px serif';
+    ctx.fillText(this.count, this.x, this.y)
   }
 }
 
 let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
+let score = new Score(50, 50, 200, 100)
 
 
 const makeCrows = () => {
