@@ -56,8 +56,8 @@ class GameObject {
   draw(image) {
     ctx.drawImage(image, this.column * this.width, this.row * this.height, this.width, this.height, this.x, this.y, this.width, this.height)
     // 当たり判定のチェック
-    ctx.fillRect(this.centerX, this.centerY, 5, 5)
-    ctx.fillStyle = "red"
+    // ctx.fillRect(this.centerX, this.centerY, 5, 5)
+    // ctx.fillStyle = "red"
   }
   delete(){
     // 自分以外を消す
@@ -189,15 +189,10 @@ class Gun extends GameObject{
       super.draw(this.image)
       super.calculateCenterPos()
       this.shotCrow()
-    // if(bird.isShooting){
-      
-    // }
   }
-  // TODO カラス側に持たせる？
   shotCrow(){
     crowsObj.forEach((crow)=>{
       if(this.computedDistance(crow)){
-        // bird.isShooting = false
         delete this
         this.delete()
         score.addScore()
@@ -214,7 +209,7 @@ class Crow extends GameObject {
     this.flySwitch = false
     this.frameCount = 0
     this.originY = this.y
-    this.flySpeed = 1
+    this.flySpeed = makeRandomNum(8, 2)
     // this.speed = makeRandomNum(6, 2)
   }
   update(){
@@ -235,7 +230,7 @@ class Crow extends GameObject {
   }
   fly(){
     this.y += this.flySpeed
-    if(this.originY + 30 < this.y || this.originY - 30 > this.y){
+    if(this.originY + 24 < this.y || this.originY - 24 > this.y){
       this.flySpeed *= -1
     }
     // if(this.frameCount % 10 === 0 && !this.flySwitch){
@@ -260,8 +255,9 @@ class Score extends GameObject {
     this.count = 0
   }
   update(){
-    ctx.font = '48px serif';
+    ctx.font = '48px san-serif';
     ctx.fillText(this.count, this.x, this.y)
+    ctx.fillStyle = 'white'
   }
 }
 
@@ -271,7 +267,7 @@ let score = new Score(50, 50, 200, 100)
 
 const makeCrows = () => {
   let crows = []
-  for (let i = 0; i < makeRandomNum(8,6); i++) {
+  for (let i = 0; i < makeRandomNum(10,7); i++) {
     const x = makeRandomNum(canvasW + 200, canvasW)
     const y = makeRandomNum(canvasH - 96, 0)
     crows[i] = new Crow(imgCrow, x, y, 64, 64)
