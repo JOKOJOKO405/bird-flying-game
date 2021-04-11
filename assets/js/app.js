@@ -241,12 +241,13 @@ class Crow extends GameObject {
     // }
   }
 }
-
 class Score extends GameObject {
-  constructor(x, y, width, height, isCount){
+  constructor(x, y, width, height, isCount, isTimer){
     super('', x, y, width, height)
     this.count = 0
     this.isCount = isCount
+    this.isTimer = isTimer
+    this.timer = null
   }
   addScore(){
     this.count++
@@ -258,6 +259,10 @@ class Score extends GameObject {
     if(this.isCount){
       ctx.font = '40px sans-serif';
       ctx.fillText(this.count, this.x, this.y)
+    }else if(!this.isCount && this.isTimer){
+      this.timer = Math.floor(progress / 1000)
+      ctx.font = '32px sans-serif';
+      ctx.fillText(this.timer, this.x, this.y)
     }else{
       ctx.font = '16px sans-serif';
       ctx.fillText('あてたカラス', this.x, this.y)
@@ -267,8 +272,9 @@ class Score extends GameObject {
 }
 
 let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
-let score = new Score(140, 50, 200, 100, true)
-let body = new Score(10, 50, 10, 100, false)
+let score = new Score(140, 50, 200, 100, true, false)
+let body = new Score(10, 50, 10, 100, false, false)
+let timer = new Score(400, 50, 10, 10, false, true)
 
 
 const makeCrows = () => {
@@ -283,11 +289,15 @@ const makeCrows = () => {
 }
 makeCrows()
 
+let startTime = null
+let progress = null
+
 function mainLoop(timestamp) {
-  let startTime = timestamp
+  startTime = timestamp
   let loopId = window.requestAnimationFrame(mainLoop)
   // 00秒間の間ループ
-  const progress = timestamp - startTime / 1000
+  progress = timestamp - startTime / 1000
+
   console.debug(Math.floor(progress))
   if(Math.floor(progress) < 10000){
     ctx.clearRect(0, 0, canvasW, canvasH)
@@ -296,7 +306,7 @@ function mainLoop(timestamp) {
     })
   }else{
     cancelAnimationFrame(loopId)
-    ctx.clearRect(0, 0, canvasW, canvasH)
+    // ctx.clearRect(0, 0, canvasW, canvasH)
   }
 }
 requestAnimationFrame(mainLoop)
