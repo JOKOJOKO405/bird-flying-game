@@ -42,7 +42,6 @@ class GameObject {
   computedDistance(obj) {
     const distanceX = Math.abs(obj.centerX - this.centerX)
     const distanceY = Math.abs(obj.centerY - this.centerY)
-    console.log(distanceX, distanceY)
     // 三平方の定理
     let dist = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2))
     return dist < 50
@@ -230,7 +229,7 @@ class Crow extends GameObject {
   }
   fly(){
     this.y += this.flySpeed
-    if(this.originY + 24 < this.y || this.originY - 24 > this.y){
+    if(this.originY + 34 < this.y || this.originY - 34 > this.y){
       this.flySpeed *= -1
     }
     // if(this.frameCount % 10 === 0 && !this.flySwitch){
@@ -244,9 +243,10 @@ class Crow extends GameObject {
 }
 
 class Score extends GameObject {
-  constructor(x, y, width, height){
+  constructor(x, y, width, height, isCount){
     super('', x, y, width, height)
     this.count = 0
+    this.isCount = isCount
   }
   addScore(){
     this.count++
@@ -255,14 +255,20 @@ class Score extends GameObject {
     this.count = 0
   }
   update(){
-    ctx.font = '48px san-serif';
-    ctx.fillText(this.count, this.x, this.y)
+    if(this.isCount){
+      ctx.font = '40px sans-serif';
+      ctx.fillText(this.count, this.x, this.y)
+    }else{
+      ctx.font = '16px sans-serif';
+      ctx.fillText('あてたカラス', this.x, this.y)
+    }
     ctx.fillStyle = 'white'
   }
 }
 
 let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
-let score = new Score(50, 50, 200, 100)
+let score = new Score(140, 50, 200, 100, true)
+let body = new Score(10, 50, 10, 100, false)
 
 
 const makeCrows = () => {
@@ -277,12 +283,21 @@ const makeCrows = () => {
 }
 makeCrows()
 
-function mainLoop() {
+function mainLoop(timestamp) {
+  let startTime = timestamp
   let loopId = window.requestAnimationFrame(mainLoop)
-  ctx.clearRect(0, 0, canvasW, canvasH)
-  gameObjs.forEach((gameObj) => {
-    gameObj.update()
-  })
+  // 00秒間の間ループ
+  const progress = timestamp - startTime / 1000
+  console.debug(Math.floor(progress))
+  if(Math.floor(progress) < 10000){
+    ctx.clearRect(0, 0, canvasW, canvasH)
+    gameObjs.forEach((gameObj) => {
+      gameObj.update()
+    })
+  }else{
+    cancelAnimationFrame(loopId)
+    ctx.clearRect(0, 0, canvasW, canvasH)
+  }
 }
 requestAnimationFrame(mainLoop)
 
