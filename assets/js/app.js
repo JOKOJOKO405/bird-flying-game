@@ -307,7 +307,8 @@ function mainLoop(timestamp) {
     gameObjs.forEach((gameObj) => {
       gameObj.update()
     })
-  }else{
+  }
+  else{
     cancelAnimationFrame(loopId)
     setTimeout(() => {
       ctx.clearRect(0, 0, canvasW, canvasH)
