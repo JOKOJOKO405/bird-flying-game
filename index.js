@@ -1,21 +1,18 @@
 const { Pool, Client } = require('pg')
 const pool = new Pool({
-  user: 'fmmrwrckibcckt',
-  host: 'ec2-3-234-85-177.compute-1.amazonaws.com',
-  database: 'dbv99d6ao84r1h',
-  password: '8acbd1259ab012e375a68cb8cb56b58ded91c472ac3c4e809191eb4c02c06b3a',
+  user: 'jokojoko405',
+  host: 'localhost',
+  database: 'example-db',
+  password: '',
   port: 5432,
 })
-
-
-
 
 const express = require('express')
 var path = require('path');
 const app = express()
 const port = 3000
 app.get('/', (req, res) => {
-  const sql = `CREATE TABLE accounts (
+  const sql = `CREATE TABLE testtable (
     user_id serial PRIMARY KEY,
     username VARCHAR ( 50 ) UNIQUE NOT NULL,
     password VARCHAR ( 50 ) NOT NULL,
