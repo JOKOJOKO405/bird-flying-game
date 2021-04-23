@@ -17,8 +17,15 @@
   },
   "homepage": "https://github.com/JOKOJOKO405/bird-flying-game#readme",
   "dependencies": {
-    "express": "^4.17.1",
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
     "path": "^0.12.7",
     "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "express": "^4.17.1",
+    "webpack": "^5.35.0",
+    "webpack-dev-middleware": "^4.1.0",
+    "webpack-hot-middleware": "^2.25.0"
   }
 }

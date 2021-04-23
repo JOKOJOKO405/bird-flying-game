@@ -334,3 +334,10 @@ window.onkeydown = (event) => {
     selectedObj.shot()
   }
 }
+
+const postScore = () => {
+  axios.post('http://localhost:3000/post_score', {
+    name: 'suzuki',
+    score: 500
+  });
+}
