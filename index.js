@@ -1,15 +1,3 @@
-const axios = require('axios');
-
-const zipcode = 3530006
-axios.get(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipcode}`)
-  .then((response) =>{
-    console.log('でーた', response.data);
-    console.log('ステータス',response.status);
-  }).catch((err) =>{
-    console.error('えらー',err)
-  })
-
-
 const { Pool, Client } = require('pg')
 const pool = new Pool({
   user: 'jokojoko405',
@@ -22,7 +10,7 @@ const pool = new Pool({
 const express = require('express')
 var path = require('path');
 const app = express()
-const port = 3000
+const port = 5500
 
 const bodyParser = require("body-parser");
 const router = express.Router();
@@ -46,9 +34,14 @@ app.use(bodyParser.json());
 //     console.log(result)
 //     res.send('Hello World!')
 // })
-app.get('/game', (req, res) => {
-  res.sendFile(path.join(__dirname + '/index.html'));
-})
+// app.get('/game', (req, res) => {
+//   res.sendFile(path.join(__dirname + '/index.html'));
+// })
+router.get('/',function(req,res){
+  res.sendFile(path.join(__dirname+'/index.html'));
+  console.debug(__dirname);
+  //__dirname : It will resolve to your project folder.
+});
 app.post('/post_score', (req, res) => {
   pool.query(`INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, now(), now())`, (err, res) => {
     if(err) {
@@ -57,21 +50,11 @@ app.post('/post_score', (req, res) => {
     // console.log(req.body.name)
   })
 })
+app.use(express.static('public'))
+app.use('/', router);
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-pool.query('select * from account', (err, res) => {
-  if(err) {
-    return console.error(err.stack)
-  }
-  console.log(res.rows)
-})
 
-pool.query(`INSERT INTO account (username, score, created_on, last_login) VALUES ('taro', 255, now(), now())`, (err, res) => {
-  if(err) {
-    return console.error(err.stack)
-  }
-  console.log(res.rows)
-})
 

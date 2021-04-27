@@ -336,7 +336,7 @@ window.onkeydown = (event) => {
 }
 
 const postScore = () => {
-  axios.post('http://localhost:3000/post_score', {
+  axios.post('http://localhost:5500/post_score', {
     name: 'suzuki',
     score: 500
   });
