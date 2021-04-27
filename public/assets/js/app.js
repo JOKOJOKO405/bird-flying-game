@@ -8,6 +8,7 @@ const imgGun = new Image()
 imgBird.src = './assets/img/128.png'
 imgCrow.src = './assets/img/enemy_s.png'
 imgGun.src = './assets/img/don.png'
+
 // 画面設定
 const canvasH = 512
 const canvasW = 768
@@ -258,16 +259,16 @@ class Text extends GameObject {
   update(){
     // カラスの数カウント
     if(this.isCount){
-      ctx.font = '40px sans-serif';
+      ctx.font = '40px DotGothic16';
       ctx.fillText(this.count, this.x, this.y)
     // 制限時間
     }else if(!this.isCount && this.isTimer){
       this.timer = Math.floor(progress / 1000)
-      ctx.font = '32px sans-serif';
+      ctx.font = '32px DotGothic16';
       ctx.fillText(this.timer, this.x, this.y)
     // 添字
     }else{
-      ctx.font = '16px sans-serif';
+      ctx.font = '16px DotGothic16';
       ctx.fillText('あてたカラス', this.x, this.y)
     }
     ctx.fillStyle = 'white'
@@ -337,7 +338,7 @@ window.onkeydown = (event) => {
 
 const postScore = () => {
   axios.post('http://localhost:5500/post_score', {
-    name: 'suzuki',
-    score: 500
+    name: 'tst',
+    score: 5300
   });
 }

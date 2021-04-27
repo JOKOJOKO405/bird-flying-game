@@ -19,42 +19,22 @@ const router = express.Router();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// app.get('/', (req, res) => {
-//   const sql = `CREATE TABLE account (
-//     user_id serial PRIMARY KEY,
-//     username VARCHAR ( 50 ) UNIQUE NOT NULL,
-//     score VARCHAR ( 50 ) NOT NULL,
-//     created_on TIMESTAMP NOT NULL,
-//     last_login TIMESTAMP 
-//     );`
-//     const result = pool.query(sql, (err, res) => {
-//       console.log(err, res)
-//       pool.end()
-//     })
-//     console.log(result)
-//     res.send('Hello World!')
-// })
-// app.get('/game', (req, res) => {
-//   res.sendFile(path.join(__dirname + '/index.html'));
-// })
-router.get('/',function(req,res){
+// index.htmlを返す処理
+router.get('/',(req,res) => {
   res.sendFile(path.join(__dirname+'/index.html'));
-  console.debug(__dirname);
-  //__dirname : It will resolve to your project folder.
 });
+
 app.post('/post_score', (req, res) => {
-  pool.query(`INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, now(), now())`, (err, res) => {
-    if(err) {
-      return console.error(err.stack)
-    }
-    // console.log(req.body.name)
+  pool.query(
+    `INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, current_timestamp, current_timestamp)`,
+     (err, res) => {
+    if(err) return console.error(err.stack)
   })
 })
 app.use(express.static('public'))
 app.use('/', router);
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+
+app.listen(port)
 
 
 
