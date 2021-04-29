@@ -26,6 +26,44 @@ const makeRandomNum = (max, min) => {
   return num
 }
 
+
+/******************************** 
+* フォーム送信
+********************************/ 
+const form = document.getElementById('form');
+const button = document.getElementById('send_button');
+const scoreText = document.getElementById('score');
+const input = document.getElementById('input_name');
+
+
+const postScore = () => {
+  axios.post('http://localhost:5500/post_score', {
+    name: input.value,
+    score: score.count
+  })
+  .then((res) => {
+    location.replace('/')
+    console.log(res)
+  })
+  .catch((error)=>{
+    console.log(error)
+  })
+  .finally(()=>{
+    location.replace('/')
+  })
+  ;
+}
+
+const getScore = () => {
+  axios.get('http://localhost:5500/get_score')
+    .then((res) => {
+      console.debug('resのなかみ', res)
+    })
+    .catch((err) => {
+      console.debug(err)
+    })
+}
+
 class GameObject {
   constructor(image, x, y, width, height) {
     this.image = image
@@ -106,9 +144,9 @@ class Bird extends GameObject {
       this.currentFrame = this.deadFrame
       this.changeFrame()
       this.y += 4
-      if (this.y < 0) {
-        delete this
+      if (this.y > canvasH) {
         this.delete()
+        gameOver.isOver = true
       }
     }
     // ジャンプしてない＆地面についてる
@@ -275,10 +313,29 @@ class Text extends GameObject {
   }
 }
 
+class GameOverText extends GameObject {
+  constructor(x, y, width, height){
+    super('', x, y, width, height)
+    this.isOver = false
+  }
+  update(){
+  }
+  showText(){
+    ctx.font = '60px DotGothic16';
+    ctx.fillStyle = 'white'
+    if(bird.isHit){
+      ctx.fillText('GAME OVER', this.x, this.y)
+    }else{
+      ctx.fillText('TIME IS UP', this.x, this.y)
+    }
+  }
+}
+
 let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
 let score = new Text(140, 50, 200, 100, true, false)
 let body = new Text(10, 50, 10, 100, false, false)
 let timer = new Text(400, 50, 10, 10, false, true)
+let gameOver = new GameOverText(200,200, 100, 100)
 
 
 const makeCrows = () => {
@@ -295,7 +352,7 @@ makeCrows()
 
 let startTime = null
 let progress = null
-const gameTime = 11000
+const gameTime = 31000
 
 function mainLoop(timestamp) {
   startTime = timestamp
@@ -303,7 +360,7 @@ function mainLoop(timestamp) {
   // 00秒間の間ループ
   progress = gameTime - startTime
 
-  if(Math.floor(progress) >= 0){
+  if(Math.floor(progress) > 0 && !gameOver.isOver) {
     ctx.clearRect(0, 0, canvasW, canvasH)
     gameObjs.forEach((gameObj) => {
       gameObj.update()
@@ -311,13 +368,27 @@ function mainLoop(timestamp) {
   }
   else{
     cancelAnimationFrame(loopId)
+    ctx.clearRect(0, 0, canvasW, canvasH)
+    gameOver.showText()
+    scoreText.textContent = score.count
     setTimeout(() => {
-      ctx.clearRect(0, 0, canvasW, canvasH)
-    }, 3000)
+      canvas.style = 'display:none';
+      form.style.display = 'block'
+    }, 2000)
   }
 }
 requestAnimationFrame(mainLoop)
 
+send_button.addEventListener('click', (e)=>{
+  e.preventDefault()
+  if(!input.value) {
+    alert('ニックネームを入力してください')
+    return
+  }else{
+    postScore();
+    getScore();
+  }
+})
 
 window.onkeydown = (event) => {
   var selectedObj = bird
@@ -336,9 +407,4 @@ window.onkeydown = (event) => {
   }
 }
 
-const postScore = () => {
-  axios.post('http://localhost:5500/post_score', {
-    name: 'tst',
-    score: 5300
-  });
-}
+

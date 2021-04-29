@@ -31,3 +31,21 @@ body{
 #canvas{
   background-color: darkblue;
 }
+#input_name{
+  padding: 10px 12px;
+}
+#send_button{
+  border: none;
+  outline: none;
+  padding: 12px;
+  background-color: #000;
+  color: #fff;
+  margin-left: 10px;
+  border-radius: 4px;
+}
+#form{
+  width: 800px;
+  text-align: center;
+  margin: 0 auto;
+  display: none;
+}

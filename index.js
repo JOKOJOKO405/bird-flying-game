@@ -24,6 +24,7 @@ router.get('/',(req,res) => {
   res.sendFile(path.join(__dirname+'/index.html'));
 });
 
+// データ挿入
 app.post('/post_score', (req, res) => {
   pool.query(
     `INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, current_timestamp, current_timestamp)`,
@@ -31,6 +32,16 @@ app.post('/post_score', (req, res) => {
     if(err) return console.error(err.stack)
   })
 })
+
+// データ呼び出し
+app.get('/get_score', () => {
+  pool.query(
+    `SELECT username, score FROM account ORDER BY score ASC LIMIT 5`,
+    ( err, res) => { if(err) return console.error(err.stack)}
+  )
+})
+
+
 app.use(express.static('public'))
 app.use('/', router);
 
