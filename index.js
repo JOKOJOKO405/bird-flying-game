@@ -37,7 +37,9 @@ app.post('/post_score', (req, res) => {
 app.get('/get_score', () => {
   pool.query(
     `SELECT username, score FROM account ORDER BY score ASC LIMIT 5`,
-    ( err, res) => { if(err) return console.error(err.stack)}
+    ( err, res) => { 
+      if(err) return console.error(err.stack)
+    }
   )
 })
 

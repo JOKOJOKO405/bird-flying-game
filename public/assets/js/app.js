@@ -32,6 +32,8 @@ const makeRandomNum = (max, min) => {
 ********************************/ 
 const form = document.getElementById('form');
 const button = document.getElementById('send_button');
+const test_button = document.getElementById('test_button');
+const return_button = document.getElementById('return_button');
 const scoreText = document.getElementById('score');
 const input = document.getElementById('input_name');
 
@@ -42,7 +44,7 @@ const postScore = () => {
     score: score.count
   })
   .then((res) => {
-    location.replace('/')
+    location.replace('/index.html')
     console.log(res)
   })
   .catch((error)=>{
@@ -55,12 +57,13 @@ const postScore = () => {
 }
 
 const getScore = () => {
+  console.log('getScore is running');
   axios.get('http://localhost:5500/get_score')
     .then((res) => {
-      console.debug('resのなかみ', res)
+      console.log('resのなかみ', res)
     })
     .catch((err) => {
-      console.debug(err)
+      console.log(err)
     })
 }
 
@@ -386,8 +389,13 @@ send_button.addEventListener('click', (e)=>{
     return
   }else{
     postScore();
-    getScore();
+    // getScore();
   }
+})
+
+test_button.addEventListener('click', (e)=>{
+  e.preventDefault()
+  getScore()
 })
 
 window.onkeydown = (event) => {
