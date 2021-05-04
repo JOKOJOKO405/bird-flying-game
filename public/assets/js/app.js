@@ -37,34 +37,33 @@ const return_button = document.getElementById('return_button');
 const scoreText = document.getElementById('score');
 const input = document.getElementById('input_name');
 
+const port = 5501
 
-const postScore = () => {
-  axios.post('http://localhost:5500/post_score', {
-    name: input.value,
-    score: score.count
-  })
-  .then((res) => {
-    location.replace('/index.html')
-    console.log(res)
-  })
-  .catch((error)=>{
-    console.log(error)
-  })
-  .finally(()=>{
-    location.replace('/')
-  })
-  ;
+const postScore = async () => {
+  let data;
+  try {
+    data = axios.post(`http://localhost:${port}/post_score`, {
+      name: input.value,
+      score: score.count
+    })
+    console.log('post成功', data)
+  } catch (e) {
+    console.err
+  } finally {
+    console.log('finally', data)
+  }
 }
 
-const getScore = () => {
-  console.log('getScore is running');
-  axios.get('http://localhost:5500/get_score')
-    .then((res) => {
-      console.log('resのなかみ', res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+const getScore = async () => {
+  let data;
+  try {
+    data = axios.get(`http://localhost:${port}/get_score`)
+    console.log('get成功', data)
+  } catch (e) {
+    console.error(e)
+  } finally {
+    console.log('finally', data)
+  }
 }
 
 class GameObject {

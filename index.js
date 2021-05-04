@@ -10,7 +10,7 @@ const pool = new Pool({
 const express = require('express')
 var path = require('path');
 const app = express()
-const port = 5500
+const port = 5501
 
 const bodyParser = require("body-parser");
 const router = express.Router();
@@ -25,22 +25,29 @@ router.get('/',(req,res) => {
 });
 
 // データ挿入
-app.post('/post_score', (req, res) => {
-  pool.query(
-    `INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, current_timestamp, current_timestamp)`,
-     (err, res) => {
-    if(err) return console.error(err.stack)
-  })
+app.post('/post_score', async (req, res) => {
+  try {
+    const data = await pool.query(
+      `INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, current_timestamp, current_timestamp)`
+    )
+    console.log('入ったなかみ', data)
+  } catch (err) {
+    console.error(err)
+  } finally {
+    console.log('post_score done!')
+  }
 })
 
 // データ呼び出し
-app.get('/get_score', () => {
-  pool.query(
-    `SELECT username, score FROM account ORDER BY score ASC LIMIT 5`,
-    ( err, res) => { 
-      if(err) return console.error(err.stack)
-    }
-  )
+app.get('/get_score', async () => {
+  try {
+    const data = await pool.query(
+      `SELECT username, score FROM account ORDER BY score DESC LIMIT 5`
+    )
+    console.log('そーとでーた', data.rows)
+  } catch(err) {
+    console.error(err)
+  }
 })
 
 
