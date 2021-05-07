@@ -34,35 +34,43 @@ const form = document.getElementById('form');
 const button = document.getElementById('send_button');
 const test_button = document.getElementById('test_button');
 const return_button = document.getElementById('return_button');
-const scoreText = document.getElementById('score');
+const scoreText = document.getElementById('scoreRank');
+const yourScore = document.getElementById('score');
 const input = document.getElementById('input_name');
 
-const port = 5501
+
+const port = 5502
 
 const postScore = async () => {
   let data;
   try {
-    data = axios.post(`http://localhost:${port}/post_score`, {
+    data = await axios.post(`http://localhost:${port}/post_score`, {
       name: input.value,
       score: score.count
     })
     console.log('post成功', data)
   } catch (e) {
-    console.err
+    console.error(e)
   } finally {
     console.log('finally', data)
   }
 }
 
 const getScore = async () => {
-  let data;
+  let result;
   try {
-    data = axios.get(`http://localhost:${port}/get_score`)
-    console.log('get成功', data)
+    result = await axios.get(`http://localhost:${port}/get_score`)
+    if(result){
+      result.data.rows.forEach(row =>{
+        var node = document.createElement("p");
+        node.innerText = `なまえ：${row.username}、すこあ：${row.score}`
+        scoreText.appendChild(node)
+      })
+    }
   } catch (e) {
     console.error(e)
   } finally {
-    console.log('finally', data)
+    console.log('finally', result)
   }
 }
 
@@ -372,7 +380,7 @@ function mainLoop(timestamp) {
     cancelAnimationFrame(loopId)
     ctx.clearRect(0, 0, canvasW, canvasH)
     gameOver.showText()
-    scoreText.textContent = score.count
+    yourScore.textContent = score.count
     setTimeout(() => {
       canvas.style = 'display:none';
       form.style.display = 'block'
@@ -381,14 +389,13 @@ function mainLoop(timestamp) {
 }
 requestAnimationFrame(mainLoop)
 
-send_button.addEventListener('click', (e)=>{
+send_button.addEventListener('click', async (e)=>{
   e.preventDefault()
   if(!input.value) {
     alert('ニックネームを入力してください')
     return
   }else{
-    postScore();
-    // getScore();
+    await postScore();
   }
 })
 
