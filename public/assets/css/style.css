@@ -36,6 +36,12 @@ body{
 #input_name{
   padding: 10px 12px;
 }
+h1{
+  text-align: center;
+  font-family: PixelMplus10-Bold;
+  font-size: 32px;
+  margin-bottom: 24px;
+}
 h2{
   font-size: 24px;
   font-family: PixelMplus10-Bold;
@@ -70,6 +76,7 @@ table{
 #start_game{
   background-color:palevioletred;
   display: block;
+  margin-bottom: 40px;
 }
 #scoreTable{
   display:none;
@@ -83,7 +90,7 @@ table{
 .score-table{
   border: 1px solid #ccc;
   border-collapse: collapse;
-  margin: 40px auto 0;
+  margin: 24px auto 0;
   text-align: left;
   width: 100%;
 }
