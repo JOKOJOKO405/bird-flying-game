@@ -11,12 +11,22 @@
   </head>
   <body>
     <div id="wrapper">
-      <h1>おそってくる　カラスを　たいじしよう！</h1>
-      <div class="start-button">
-        <button id="start_game" class="button">ゲームをはじめる</button>
+      <h1 id="comment"></h1>
+      <p style="text-align:center">みんなの　スコア</p>
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th>なまえ</th>
+            <th>スコア</th>
+          </tr>
+        </thead>
+        <tbody id="scoreRankBody"></tbody>
+      </table>
+      <div style="text-align: center">
+        <a id="return_button"  class="button" onclick="location.href='/'" type="button">もどる</a>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module" src="./assets/js/start.js"></script>
+    <script type="module" src="./assets/js/score.js"></script>
   </body>
 </html>

@@ -7,7 +7,7 @@ const postScore = async (name, score) => {
       name: name,
       score: score
     })
-    window.location.href='/';
+    window.location.href='/score';
   } catch (e) {
     console.error(e)
   } finally {
