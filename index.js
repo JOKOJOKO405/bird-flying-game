@@ -23,6 +23,9 @@ app.use(bodyParser.json());
 router.get('/',(req,res) => {
   res.sendFile(path.join(__dirname+'/index.html'));
 });
+router.get('/game',(req,res) => {
+  res.sendFile(path.join(__dirname+'/game.html'));
+});
 
 // データ挿入
 app.post('/post_score', async (req, res) => {
@@ -49,6 +52,7 @@ app.get('/get_score', async (req, res) => {
 
 app.use(express.static('public'))
 app.use('/', router);
+app.use('/game.html', router);
 
 app.listen(port)
 

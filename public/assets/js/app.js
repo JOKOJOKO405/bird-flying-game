@@ -34,10 +34,8 @@ const form = document.getElementById('form');
 const button = document.getElementById('send_button');
 const test_button = document.getElementById('test_button');
 const return_button = document.getElementById('return_button');
-const scoreText = document.getElementById('scoreRank');
 const yourScore = document.getElementById('score');
 const input = document.getElementById('input_name');
-
 
 const port = 5502
 
@@ -48,29 +46,11 @@ const postScore = async () => {
       name: input.value,
       score: score.count
     })
-    console.log('post成功', data)
+    window.location.href='/';
   } catch (e) {
     console.error(e)
   } finally {
     console.log('finally', data)
-  }
-}
-
-const getScore = async () => {
-  let result;
-  try {
-    result = await axios.get(`http://localhost:${port}/get_score`)
-    if(result){
-      result.data.rows.forEach(row =>{
-        var node = document.createElement("p");
-        node.innerText = `なまえ：${row.username}、すこあ：${row.score}`
-        scoreText.appendChild(node)
-      })
-    }
-  } catch (e) {
-    console.error(e)
-  } finally {
-    console.log('finally', result)
   }
 }
 
@@ -384,30 +364,17 @@ function mainLoop(timestamp) {
     setTimeout(() => {
       canvas.style = 'display:none';
       form.style.display = 'block'
+      getScore()
     }, 2000)
   }
 }
 requestAnimationFrame(mainLoop)
 
-send_button.addEventListener('click', async (e)=>{
-  e.preventDefault()
-  if(!input.value) {
-    alert('ニックネームを入力してください')
-    return
-  }else{
-    await postScore();
-  }
-})
-
-test_button.addEventListener('click', (e)=>{
-  e.preventDefault()
-  getScore()
-})
 
 window.onkeydown = (event) => {
   var selectedObj = bird
   if(bird.isHit) return
-
+  
   if (event.code === 'ArrowUp') {
     selectedObj.jump()
   } else if (event.code === 'ArrowRight') {
@@ -421,4 +388,13 @@ window.onkeydown = (event) => {
   }
 }
 
+send_button.addEventListener('click', async (e)=>{
+  e.preventDefault()
+  if(!input.value) {
+    alert('ニックネームを入力してください')
+    return
+  }else{
+    await postScore();
+  }
+})
 

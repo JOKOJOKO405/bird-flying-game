@@ -27,6 +27,7 @@ body{
 }
 #wrapper{
   width: 800px;
+  margin: 0 auto;
 }
 #canvas{
   background-color: darkblue;
@@ -34,18 +35,63 @@ body{
 #input_name{
   padding: 10px 12px;
 }
-#send_button{
+h2{
+  font-size: 24px;
+  font-family: PixelMplus10-Bold;
+  margin-bottom: 16px;
+  color: palevioletred;
+}
+h3{
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+.button{
   border: none;
   outline: none;
   padding: 12px;
-  background-color: #000;
-  color: #fff;
-  margin-left: 10px;
   border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  margin: 0 auto;
+}
+#send_button{
+  background-color: palevioletred;
+  margin-left: 10px;
+}
+#return_button{
+  background-color: #ccc;
+}
+#start_game{
+  background-color:palevioletred;
+  display: block;
 }
 #form{
-  width: 800px;
+  max-width: 400px;
   text-align: center;
   margin: 0 auto;
   display: none;
+}
+.score-table{
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 40px auto 0;
+  text-align: left;
+  max-width: 400px;
+}
+.score-table tr:not(:last-child){
+  border-bottom: 1px solid #ccc;
+}
+.score-table th{
+  text-align: center;
+  background-color:dimgray;
+  color: white;
+}
+.score-table th,
+.score-table td
+{
+  padding: 8px 32px;
+}
+.score-table th:first-child,
+.score-table td:first-child{
+  border-right: 1px solid #ccc;
 }
