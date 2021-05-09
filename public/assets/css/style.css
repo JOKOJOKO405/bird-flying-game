@@ -30,7 +30,8 @@ body{
   margin: 0 auto;
 }
 #canvas{
-  background-color: darkblue;
+  background: url("../img/bg.png") top left repeat;
+  background-size: contain;
 }
 #input_name{
   padding: 10px 12px;
@@ -54,16 +55,24 @@ h3{
   color: #fff;
   margin: 0 auto;
 }
+table{
+  max-width: 400px;
+}
 #send_button{
   background-color: palevioletred;
-  margin-left: 10px;
+  margin-left: 16px;
 }
 #return_button{
-  background-color: #ccc;
+  background-color: #aaa;
+  display: inline-block;
+  margin-top: 40px;
 }
 #start_game{
   background-color:palevioletred;
   display: block;
+}
+#scoreTable{
+  display:none;
 }
 #form{
   max-width: 400px;
@@ -76,7 +85,7 @@ h3{
   border-collapse: collapse;
   margin: 40px auto 0;
   text-align: left;
-  max-width: 400px;
+  width: 100%;
 }
 .score-table tr:not(:last-child){
   border-bottom: 1px solid #ccc;

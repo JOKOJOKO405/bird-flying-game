@@ -1,5 +1,7 @@
 import * as use from './axiosFunc.js'
 
+document.activeElement.blur()
+
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
@@ -34,10 +36,11 @@ const makeRandomNum = (max, min) => {
 ********************************/ 
 const form = document.getElementById('form');
 const button = document.getElementById('send_button');
-const test_button = document.getElementById('test_button');
-const return_button = document.getElementById('return_button');
 const yourScore = document.getElementById('score');
 const input = document.getElementById('input_name');
+const scoreTable = document.getElementById('scoreTable');
+const returnButton = document.getElementById('return_button');
+returnButton.blur()
 
 class GameObject {
   constructor(image, x, y, width, height) {
@@ -310,7 +313,7 @@ let bird = new Bird(imgBird, 0, canvasH - 128, 128, 128)
 let score = new Text(140, 50, 200, 100, true, false)
 let body = new Text(10, 50, 10, 100, false, false)
 let timer = new Text(400, 50, 10, 10, false, true)
-let gameOver = new GameOverText(200,200, 100, 100)
+let gameOver = new GameOverText(240,canvasH/2, 100, 100)
 
 
 const makeCrows = () => {
@@ -348,6 +351,7 @@ function mainLoop(timestamp) {
     yourScore.textContent = score.count
     setTimeout(() => {
       canvas.style = 'display:none';
+      scoreTable.style.display = 'block'
       form.style.display = 'block'
       use.getScore()
     }, 2000)
@@ -373,7 +377,7 @@ window.onkeydown = (event) => {
   }
 }
 
-send_button.addEventListener('click', async (e)=>{
+button.addEventListener('click', async (e)=>{
   e.preventDefault()
   if(!input.value) {
     alert('ニックネームを入力してください')
