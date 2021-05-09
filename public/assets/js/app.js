@@ -40,6 +40,7 @@ const yourScore = document.getElementById('score');
 const input = document.getElementById('input_name');
 const scoreTable = document.getElementById('scoreTable');
 const returnButton = document.getElementById('return_button');
+const comment = document.getElementById('comment');
 returnButton.blur()
 
 class GameObject {
@@ -354,7 +355,18 @@ function mainLoop(timestamp) {
       scoreTable.style.display = 'block'
       form.style.display = 'block'
       use.getScore()
-    }, 2000)
+      if(score.count >= 300){
+        comment.innerText = 'てんさい　あらわる！'
+      }else if(score.count >= 100 && score.count <= 299){
+        comment.innerText = 'げきたいのたつじん！'
+      }else if(score.count >= 50 && score.count <= 99){
+        comment.innerText = 'なかなか　やるね！'
+      }else if(score.count >= 20 && score.count <= 49){
+        comment.innerText = 'つぎは　がんばって！'
+      }else{
+        comment.innerText = 'でなおしてこい！'
+      }
+    }, 2500)
   }
 }
 requestAnimationFrame(mainLoop)
