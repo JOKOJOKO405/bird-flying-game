@@ -1,3 +1,5 @@
+import * as use from './axiosFunc.js'
+
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
@@ -36,23 +38,6 @@ const test_button = document.getElementById('test_button');
 const return_button = document.getElementById('return_button');
 const yourScore = document.getElementById('score');
 const input = document.getElementById('input_name');
-
-const port = 5502
-
-const postScore = async () => {
-  let data;
-  try {
-    data = await axios.post(`http://localhost:${port}/post_score`, {
-      name: input.value,
-      score: score.count
-    })
-    window.location.href='/';
-  } catch (e) {
-    console.error(e)
-  } finally {
-    console.log('finally', data)
-  }
-}
 
 class GameObject {
   constructor(image, x, y, width, height) {
@@ -364,7 +349,7 @@ function mainLoop(timestamp) {
     setTimeout(() => {
       canvas.style = 'display:none';
       form.style.display = 'block'
-      getScore()
+      use.getScore()
     }, 2000)
   }
 }
@@ -394,7 +379,7 @@ send_button.addEventListener('click', async (e)=>{
     alert('ニックネームを入力してください')
     return
   }else{
-    await postScore();
+    await use.postScore(input.value, score.count);
   }
 })
 
