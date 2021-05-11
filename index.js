@@ -4,7 +4,7 @@ const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
 })
-
+// ここでエラー
 const express = require('express')
 var path = require('path');
 const app = express()
