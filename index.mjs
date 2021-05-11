@@ -1,4 +1,6 @@
-require('dotenv').config({path: __dirname + '/.env'})
+import dotenv from 'dotenv';
+const result = dotenv.config();
+// require('dotenv').config()
 const { Client } = require('pg')
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
