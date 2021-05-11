@@ -1,10 +1,8 @@
-const { Pool, Client } = require('pg')
-const pool = new Pool({
-  user: 'jokojoko405',
-  host: 'localhost',
-  database: 'example-db',
-  password: '',
-  port: 5432,
+require('dotenv').config()
+const { Client } = require('pg')
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
 })
 
 const express = require('express')
@@ -33,7 +31,7 @@ router.get('/score',(req,res) => {
 // データ挿入
 app.post('/post_score', async (req, res) => {
   try {
-    const users = await pool.query(
+    const users = await client.query(
       `SELECT username, score FROM account`
     )
     // 同じユーザーがいるか
@@ -41,11 +39,11 @@ app.post('/post_score', async (req, res) => {
       return row.username === req.body.name
     })
     if(!isSameUser){
-      await pool.query(
+      await client.query(
         `INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, current_timestamp, current_timestamp)`
       )
     }else{
-      await pool.query(
+      await client.query(
         `UPDATE account SET "score"=${req.body.score}, "last_login"=current_timestamp WHERE "username"='${req.body.name}'`
       )
     }
@@ -57,7 +55,7 @@ app.post('/post_score', async (req, res) => {
 
 // データ呼び出し
 app.get('/get_score', async (req, res) => {
-  const data = await pool.query(
+  const data = await client.query(
     `SELECT username, score FROM account ORDER BY score DESC LIMIT 5`
   )
   res.send(data); 
