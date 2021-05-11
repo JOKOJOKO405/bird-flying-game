@@ -1,5 +1,4 @@
 require('dotenv').config()
-import * as use from './assets/js/axiosFunc.js'
 const { Client } = require('pg')
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
