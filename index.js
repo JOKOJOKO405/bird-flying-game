@@ -8,7 +8,7 @@ const client = new Client({
 const express = require('express')
 var path = require('path');
 const app = express()
-const port = 5502
+const port = 5432
 
 const bodyParser = require("body-parser");
 const router = express.Router();
