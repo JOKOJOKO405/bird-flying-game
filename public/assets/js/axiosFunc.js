@@ -3,7 +3,7 @@ const scoreRankTableBody = document.getElementById('scoreRankBody');
 const postScore = async (name, score) => {
   let data;
   try {
-    data = await axios.post(`http://localhost:${port}/post_score`, {
+    data = await axios.post(`https://jokojoko405.herokuapp.com/post_score`, {
       name: name,
       score: score
     })
@@ -18,7 +18,7 @@ const postScore = async (name, score) => {
 const getScore = async () => {
   let result;
   try {
-    result = await axios.get(`http://localhost:${port}/get_score`)
+    result = await axios.get(`https://jokojoko405.herokuapp.com/get_score`)
     if(result){
       result.data.rows.forEach(row =>{
         let tr = document.createElement('tr');
