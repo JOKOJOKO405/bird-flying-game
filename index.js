@@ -52,7 +52,7 @@ app.post('/post_score', async (req, res) => {
 })
 
 // データ呼び出し
-app.get('/get_score', async (req, res) => {
+app.get('/get_score', (req, res) => {
   // try {
   //   const data = await client.query(
   //     `SELECT username, score FROM account ORDER BY score DESC LIMIT 5`
@@ -62,6 +62,9 @@ app.get('/get_score', async (req, res) => {
   // } catch (e) {
   //   console.error(e)
   // }
+  client.query('SELECT username, score FROM account ORDER BY score DESC LIMIT 5', (err, result) => {
+    console.log(result.rows);
+  });
   res.send('hello')
 })
 
