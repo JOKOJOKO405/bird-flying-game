@@ -64,8 +64,8 @@ app.get('/get_score', (req, res) => {
   // }
   client.query('SELECT username, score FROM account ORDER BY score DESC LIMIT 5;', (err, result) => {
     console.log(result);
+    res.send(result)
   });
-  res.send('hello')
 })
 
 app.use(express.static('public'))
