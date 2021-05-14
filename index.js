@@ -59,6 +59,7 @@ app.get('/get_score', async (req, res) => {
     const data = await client.query(
       `SELECT username, score FROM account ORDER BY score DESC LIMIT 5`
       )
+      console.log(data)
       res.send(data); 
   }catch(e){
     console.error(e)
