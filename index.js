@@ -53,15 +53,16 @@ app.post('/post_score', async (req, res) => {
 
 // データ呼び出し
 app.get('/get_score', async (req, res) => {
-  try {
-    const data = await client.query(
-      `SELECT username, score FROM account ORDER BY score DESC LIMIT 5`
-    )
-    console.log(data)
-    res.send(data)
-  } catch (e) {
-    console.error(e)
-  }
+  // try {
+  //   const data = await client.query(
+  //     `SELECT username, score FROM account ORDER BY score DESC LIMIT 5`
+  //   )
+  //   console.log(data)
+  //   res.send(data)
+  // } catch (e) {
+  //   console.error(e)
+  // }
+  res.send('hello')
 })
 
 app.use(express.static('public'))
