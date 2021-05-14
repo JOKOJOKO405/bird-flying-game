@@ -62,7 +62,7 @@ app.get('/get_score', (req, res) => {
   // } catch (e) {
   //   console.error(e)
   // }
-  client.query('SELECT username, score FROM account ORDER BY score DESC LIMIT 5', (err, result) => {
+  client.query('SELECT username, score FROM account ORDER BY score DESC LIMIT 5;', (err, result) => {
     console.log(result);
   });
   res.send('hello')
