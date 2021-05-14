@@ -31,18 +31,18 @@ router.get('/score', (req, res) => {
 // データ挿入
 app.post('/post_score', async (req, res) => {
   try {
-    const users = await client.query(`SELECT username, score FROM account`)
+    const users = await client.query(`SELECT username, score FROM account;`)
     // 同じユーザーがいるか
     const isSameUser = users.rows.some((row) => {
       return row.username === req.body.name
     })
     if (!isSameUser) {
       await client.query(
-        `INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, current_timestamp, current_timestamp)`
+        `INSERT INTO account (username, score, created_on, last_login) VALUES ( '${req.body.name}', ${req.body.score}, current_timestamp, current_timestamp);`
       )
     } else {
       await client.query(
-        `UPDATE account SET "score"=${req.body.score}, "last_login"=current_timestamp WHERE "username"='${req.body.name}'`
+        `UPDATE account SET "score"=${req.body.score}, "last_login"=current_timestamp WHERE "username"='${req.body.name}';`
       )
     }
   } catch (err) {
@@ -52,7 +52,7 @@ app.post('/post_score', async (req, res) => {
 })
 
 // データ呼び出し
-app.get('/get_score', (req, res) => {
+app.get('/get_score', async (req, res) => {
   try {
     const data = await client.query(
       `SELECT username, score FROM account ORDER BY score DESC LIMIT 5`
