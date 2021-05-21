@@ -247,7 +247,7 @@ class Crow extends GameObject {
   }
   fly(){
     this.y += this.flySpeed
-    if(this.originY + 40 < this.y || this.originY - 40 > this.y){
+    if(this.originY + 32 < this.y || this.originY - 32 > this.y){
       this.flySpeed *= -1
     }
     // if(this.frameCount % 10 === 0 && !this.flySwitch){
