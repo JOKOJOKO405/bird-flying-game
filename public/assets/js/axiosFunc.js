@@ -4,6 +4,9 @@ const scoreRankTableBody = document.getElementById('scoreRankBody');
 const sanitize = (str) => {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
+const decode = (str) => {
+  return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
+}
 
 const postScore = async (name, score) => {
   let data;
@@ -31,7 +34,7 @@ const getScore = async () => {
         scoreRankTableBody.appendChild(tr)
         let td_name = document.createElement("td");
         let td_score = document.createElement("td");
-        td_name.innerText = row.username
+        td_name.innerText = decode(row.username)
         td_score.innerText = row.score
         tr.appendChild(td_name)
         tr.appendChild(td_score)
