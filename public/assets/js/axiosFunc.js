@@ -1,10 +1,16 @@
 const port = 5502
 const scoreRankTableBody = document.getElementById('scoreRankBody');
+
+const sanitize = (str) => {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 const postScore = async (name, score) => {
   let data;
+  const sanitizedName = sanitize(name)
   try {
     data = await axios.post('/post_score', {
-      name: name,
+      name: sanitizedName,
       score: score
     })
     window.location.href='/score';
