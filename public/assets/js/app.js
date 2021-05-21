@@ -226,7 +226,7 @@ class Crow extends GameObject {
     this.flySwitch = false
     this.frameCount = 0
     this.originY = this.y
-    this.flySpeed = makeRandomNum(8, 2)
+    this.flySpeed = makeRandomNum(10, 2)
     // this.speed = makeRandomNum(6, 2)
   }
   update(){
@@ -236,7 +236,7 @@ class Crow extends GameObject {
     super.draw(this.image)
     super.calculateCenterPos()
     if(this.x < 0){
-      this.reuseObj(makeRandomNum(6, 2))
+      this.reuseObj(makeRandomNum(10, 2))
     }
   }
   reuseObj(speed){
@@ -247,7 +247,7 @@ class Crow extends GameObject {
   }
   fly(){
     this.y += this.flySpeed
-    if(this.originY + 34 < this.y || this.originY - 34 > this.y){
+    if(this.originY + 40 < this.y || this.originY - 40 > this.y){
       this.flySpeed *= -1
     }
     // if(this.frameCount % 10 === 0 && !this.flySwitch){
@@ -319,7 +319,7 @@ let gameOver = new GameOverText(240,canvasH/2, 100, 100)
 
 const makeCrows = () => {
   let crows = []
-  for (let i = 0; i < makeRandomNum(10,7); i++) {
+  for (let i = 0; i < makeRandomNum(20,17); i++) {
     const x = makeRandomNum(canvasW + 200, canvasW)
     const y = makeRandomNum(canvasH - 96, 0)
     crows[i] = new Crow(imgCrow, x, y, 64, 64)
