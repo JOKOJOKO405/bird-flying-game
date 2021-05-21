@@ -226,7 +226,7 @@ class Crow extends GameObject {
     this.flySwitch = false
     this.frameCount = 0
     this.originY = this.y
-    this.flySpeed = makeRandomNum(10, 2)
+    this.flySpeed = makeRandomNum(14, 2)
     // this.speed = makeRandomNum(6, 2)
   }
   update(){
@@ -319,7 +319,7 @@ let gameOver = new GameOverText(240,canvasH/2, 100, 100)
 
 const makeCrows = () => {
   let crows = []
-  for (let i = 0; i < makeRandomNum(20,17); i++) {
+  for (let i = 0; i < makeRandomNum(18,12); i++) {
     const x = makeRandomNum(canvasW + 200, canvasW)
     const y = makeRandomNum(canvasH - 96, 0)
     crows[i] = new Crow(imgCrow, x, y, 64, 64)
