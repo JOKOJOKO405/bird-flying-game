@@ -226,7 +226,7 @@ class Crow extends GameObject {
     this.flySwitch = false
     this.frameCount = 0
     this.originY = this.y
-    this.flySpeed = makeRandomNum(14, 2)
+    this.flySpeed = makeRandomNum(12, 2)
     // this.speed = makeRandomNum(6, 2)
   }
   update(){
@@ -247,7 +247,7 @@ class Crow extends GameObject {
   }
   fly(){
     this.y += this.flySpeed
-    if(this.originY + 32 < this.y || this.originY - 32 > this.y){
+    if(this.originY + 34 < this.y || this.originY - 34 > this.y){
       this.flySpeed *= -1
     }
     // if(this.frameCount % 10 === 0 && !this.flySwitch){
